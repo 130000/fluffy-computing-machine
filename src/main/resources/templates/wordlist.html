@@ -6,7 +6,7 @@
 </head>
 <body th:style="'background-color:#AEDD81'">
 <div style="margin:20px auto;width:1000px;text-align:center" class="word">
-    <form th:action="@{/word}">
+    <form th:action="@{/wordList(current = 1,size = 10)}">
         <input type="text" id="text1" name="word"/>
         <input type="submit" id="btn2" value="点击查询"/>
     </form>
@@ -23,10 +23,10 @@
         </tr>
     </table>
     <a th:href="@{/index}">返回主界面</a>
-    <a th:href="@{/word(current = 1,size = 10}" th:unless="${page1.hasPrevious() == false}">第一页</a>
-    <a th:href="@{/word(current = ${page1.current - 1},size = 10)}" th:unless="${page1.hasPrevious() == false}">上一页</a>
-    <a th:href="@{/word(current = ${page1.current + 1},size = 10)}" th:unless="${page1.hasNext() == false}">下一页</a>
-    <a th:href="@{/word(current = ${page1.getPages()},size = 10)}" th:unless="${page1.hasNext() == false}">最后一页</a>
+    <a th:href="@{/wordList(current = 1,size = 10)}" th:unless="${page1.current == 1}">第一页</a>
+    <a th:href="@{/wordList(current = ${page1.current - 1},size = 10)}" th:unless="${page1.current == 1}">上一页</a>
+    <a th:href="@{/wordList(current = ${page1.current + 1},size = 10)}" th:unless="${page1.current == page1.totalPage}">下一页</a>
+    <a th:href="@{/wordList(current = ${page1.totalPage},size = 10)}" th:unless="${page1.current == page1.totalPage}">最后一页</a>
 </div>
 </body>
 </html>
