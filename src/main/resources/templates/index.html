@@ -2,18 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>主界面</title>
 </head>
 <body th:style="'background-color:#AEDD81'">
 <h1 style="text-align:center">英语单词笔记本</h1>
 <div style="margin:30px auto;width:1000px;text-align:center">
     <form th:action="@{/addWord}" th:object="${test}" method="post">
-        单&nbsp;&nbsp;词&nbsp;<input style="margin:5px" type="text" th:field="*{word}" placeholder="必填"/><br/>
-        释&nbsp;&nbsp;义:&nbsp;<input style="margin:5px" type="text" th:field="*{mean}" placeholder="选填"/><br/>
+        单&nbsp;&nbsp;词&nbsp;<input style="margin:5px" type="text" th:field="*{word}"/><br/>
+        释&nbsp;&nbsp;义:&nbsp;<input style="margin:5px" type="text" th:field="*{mean}"/><br/>
         <button type="submit" onclick="alert('插入成功')">插入</button>
     </form>
     <br/>
-    <a th:href="@{/word}">查看单词列表</a>
+    <a th:href="@{/wordlist}">查看单词列表</a>
 </div>
 
 </body>

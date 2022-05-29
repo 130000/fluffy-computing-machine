@@ -4,11 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.service.TestService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,11 +16,16 @@ import java.util.List;
 public class DemoController {
     @Resource
     public TestService testService;
-    @RequestMapping("/wordlist")
+    @RequestMapping("/index")
     public String wordList(Model model){
         model.addAttribute("test",new Test());
         return "index";
     }
+//    @DeleteMapping
+//    public String delete(@RequestParam String word){
+//        testService.remove(Wrappers.<Test>lambdaQuery().eq(Test::getWord,word));
+//        return "wordlist";
+//    }
     @RequestMapping(value = "/addWord",method = RequestMethod.POST)
     public String addWord(Model model,Test test) {
         Test test1 = testService.getOne(Wrappers.<Test>lambdaQuery().eq(Test::getWord,test.word));
@@ -36,17 +40,11 @@ public class DemoController {
         }
         return "index";
     }
-    @RequestMapping("/word")
+    @GetMapping("/wordList")
     public String wordByName(Model model, @RequestParam(required = false) String word,
                              @RequestParam(required = false)Integer current,
                              @RequestParam(required = false)Integer size){
-        Page<Test> page;
-        if(current == null || size == null){
-            page = new Page<>(1, 10);
-        }
-        else{
-            page = new Page<>(current,size);
-        }
+        Page<Test> page = new Page<>(current,size);
         QueryWrapper<Test> wrapper = new QueryWrapper<>();
         if(word != null) {
             wrapper.eq("word", word);

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>单词列表</title>
 </head>
 <body th:style="'background-color:#AEDD81'">
 <div style="margin:20px auto;width:1000px;text-align:center" class="word">
@@ -22,8 +22,8 @@
             <td th:text="${test3.count}"></td>
         </tr>
     </table>
-    <a th:href="@{/wordlist}">返回主界面</a>
-    <a th:href="@{/word}" th:unless="${page1.hasPrevious() == false}">第一页</a>
+    <a th:href="@{/index}">返回主界面</a>
+    <a th:href="@{/word(current = 1,size = 10}" th:unless="${page1.hasPrevious() == false}">第一页</a>
     <a th:href="@{/word(current = ${page1.current - 1},size = 10)}" th:unless="${page1.hasPrevious() == false}">上一页</a>
     <a th:href="@{/word(current = ${page1.current + 1},size = 10)}" th:unless="${page1.hasNext() == false}">下一页</a>
     <a th:href="@{/word(current = ${page1.getPages()},size = 10)}" th:unless="${page1.hasNext() == false}">最后一页</a>
