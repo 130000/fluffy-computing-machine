@@ -27,7 +27,7 @@ public class DemoController {
 //        return "wordlist";
 //    }
     @RequestMapping(method = RequestMethod.POST)
-    public String addWord(Model model,Test test) {
+    public synchronized String addWord(Model model,Test test) {
         Test test1 = testService.getOne(Wrappers.<Test>lambdaQuery().eq(Test::getWord,test.word));
         if(test1 == null && test.word != null && !test.word.equals("")){
             test1 = new Test(test.word, -1, test.mean);
