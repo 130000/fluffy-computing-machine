@@ -37,6 +37,7 @@ public class DemoController {
         else{
             testService.update(test,Wrappers.<Test>lambdaQuery().eq(Test::getWord,test.word));
         }
+        list = null;
         return "index";
     }
     @GetMapping("/wordList")
