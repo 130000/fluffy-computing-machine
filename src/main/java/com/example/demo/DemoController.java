@@ -1,14 +1,15 @@
 package com.example.demo;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.demo.service.TestService;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -27,7 +28,9 @@ public class DemoController {
 //        return "wordlist";
 //    }
     @RequestMapping(method = RequestMethod.POST)
-    public synchronized String addWord(Model model,Test test) {
+    public String addWord(Model model,Test test) {
+        test.word = test.word.trim();
+        test.mean = test.mean.trim();
         Test test1 = testService.getOne(Wrappers.<Test>lambdaQuery().eq(Test::getWord,test.word));
         if(test1 == null && test.word != null && !test.word.equals("")){
             test1 = new Test(test.word, -1, test.mean);
@@ -44,20 +47,25 @@ public class DemoController {
     public String wordByName(Model model, @RequestParam(required = false) String word,
                              Integer current,
                              Integer size){
-
+        Page<Test> page1;
         QueryWrapper<Test> wrapper = new QueryWrapper<>();
         if(word != null) {
-            wrapper.eq("word", word);
+            wrapper.eq("word", word.trim());
             Test one = testService.getOne(wrapper);
-            ++one.count;
-            testService.updateById(one);
-            Page<Test> page1 = new Page<>(1,10,1,List.of(one));
+            if(one == null){
+                page1 = new Page<>();
+            }
+            else {
+                ++one.count;
+                testService.updateById(one);
+                page1 = new Page<>(1,10,1,List.of(one));
+            }
             model.addAttribute("page1",page1);
             return "wordlist";
         }
         if(list == null)
             list = testService.list(wrapper.last("order by rand()"));
-        Page<Test> page1 = new Page<>(current,size,list.size(),list);
+        page1 = new Page<>(current,size,list.size(),list);
         model.addAttribute("page1",page1);
         return "wordlist";
     }

@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Page<T>{
@@ -13,7 +14,7 @@ public class Page<T>{
     public Page(Integer current,Integer size,Integer totalRecord,List<T> records) {
         this.current = current;
         this.totalRecord = totalRecord;
-        this.size = size;
+        this.size = size < totalRecord ? size : totalRecord;
         if(totalRecord % size == 0){
             totalPage = totalRecord / size;
         }
@@ -21,8 +22,17 @@ public class Page<T>{
             totalPage = totalRecord / size + 1;
         }
         start = (current - 1) * size;
-        end = current.equals(totalPage) ? (totalRecord % size) + (totalPage - 1) * size: start + size;
+        end = (totalRecord - start) >= 10 ? start + size : start + totalRecord % size;
         this.records = records.subList(start,end);
+    }
+    public Page(){
+        current = 1;
+        size = 10;
+        records = Collections.emptyList();
+        start = 0;
+        end = 0;
+        totalPage = 1;
+        totalRecord = 0;
     }
 
     public Integer getCurrent() {
