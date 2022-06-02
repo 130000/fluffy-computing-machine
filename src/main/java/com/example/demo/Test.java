@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.annotation.*;
 public class Test {
     @TableId(type = IdType.AUTO)
     public Integer id;
-    @TableField(updateStrategy = FieldStrategy.NOT_NULL,insertStrategy = FieldStrategy.NOT_NULL)
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY,insertStrategy = FieldStrategy.NOT_EMPTY)
     public String word;
     public Integer count;
-    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
+    @TableField(updateStrategy = FieldStrategy.NOT_EMPTY)
     public String mean;
 
     public String getMean() {

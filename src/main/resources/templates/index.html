@@ -3,17 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>主界面</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body th:style="'background-color:#AEDD81'">
 <h1 style="text-align:center">英语单词笔记本</h1>
 <div style="margin:30px auto;width:1000px;text-align:center">
-        <form th:action="@{/}" th:object="${test}" method="post">
-            单&nbsp;&nbsp;词&nbsp;<input style="margin:5px" type="text" th:field="*{word}"/><br/>
-            释&nbsp;&nbsp;义:&nbsp;<input style="margin:5px" type="text" th:field="*{mean}"/><br/>
-            <button type="submit" onclick="alert('插入成功')">插入</button>
-        </form>
+    单&nbsp;&nbsp;词&nbsp;<input id="word" style="margin:5px" type="text" th:field="${test.word}"/><br/>
+    释&nbsp;&nbsp;义:&nbsp;<input id="mean" style="margin:5px" type="text" th:field="${test.mean}"/><br/>
+    <button class="button-1" type="button" onclick="click1()">插入</button>
         <br/>
         <a th:href="@{/wordList(current = 1,size = 10)}">查看单词列表</a>
 </div>
+<script type="text/javascript">
+    function click1(){
+        $.ajax({
+            url:'/',
+            type:'post',
+            contentType:'application/json',
+            dataType:'json',
+            data:JSON.stringify({
+                word:$('#word').val(),
+                mean:$('#mean').val()
+            }),
+            success:function(data){
+                alert(data.message)
+                $('#word').val('');
+                $('#mean').val('');
+            }
+        })
+    }
+</script>
 </body>
 </html>
