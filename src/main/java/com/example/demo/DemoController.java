@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -33,17 +34,18 @@ public class DemoController {
     @PostMapping
     @ResponseBody
     public CommonResult<Test> addWord(Model model,@RequestBody Test test) {
-        System.out.println(test);
         test.word = test.word.trim();
         test.mean = test.mean.trim();
         Test test1 = testService.getOne(Wrappers.<Test>lambdaQuery().eq(Test::getWord,test.word));
-        if(test1 == null && test.word != null && !test.word.equals("")){
+        if(test1 == null && checkEmptyOrNull(test.word)){
             test1 = new Test(test.word, -1, test.mean);
             ++test1.count;
             testService.save(test1);
         }
         else{
-            testService.update(test,Wrappers.<Test>lambdaQuery().eq(Test::getWord,test.word));
+            if(!checkEmptyOrNull(test.mean))
+                testService.update(test, Wrappers.<Test>lambdaQuery().eq(Test::getWord, test.word));
+
         }
         list = null;
         return new CommonResult<>(200,"插入成功");
@@ -55,7 +57,7 @@ public class DemoController {
                              Integer size){
         Page<Test> page1;
         QueryWrapper<Test> wrapper = new QueryWrapper<>();
-        if(word != null) {
+        if(!checkEmptyOrNull(word)) {
             wrapper.eq("word", word.trim());
             Test one = testService.getOne(wrapper);
             if(one == null){
@@ -75,5 +77,7 @@ public class DemoController {
         model.addAttribute("page1",page1);
         return "wordlist";
     }
-
+    public boolean checkEmptyOrNull(String s){
+        return s == null || "".equals(s);
+    }
 }
